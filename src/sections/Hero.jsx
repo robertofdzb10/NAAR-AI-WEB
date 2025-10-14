@@ -12,12 +12,18 @@ export default function Hero() {
         >
           Soluciones Avanzadas de <span className="text-secondary">Inteligencia Artificial</span>
         </motion.h1>
-        <p className="mt-4 max-w-2xl text-base md:text-lg text-slate-700">
-          Transformamos ideas en realidad con tecnología de vanguardia. Nuestras soluciones de IA potencian el futuro de tu negocio.
+        <p className="mt-4 max-w-3xl text-base md:text-lg text-slate-700">
+          Transformamos ideas en realidad con tecnología de vanguardia.
+          Nuestras soluciones de IA potencian el futuro de tu negocio.
         </p>
         <div className="mt-8 flex gap-3">
-          <a href="#soluciones" className="bg-primary text-white px-5 py-3 rounded-xl">Ver más</a>
-          <a href="#contacto" className="bg-secondary text-primary px-5 py-3 rounded-xl font-semibold">Contacto</a>
+          <a href="#soluciones" className="btn-primary uppercase">Ver más</a>
+        </div>
+        <div className="mt-8 text-sm uppercase tracking-wide flex gap-6 text-slate-600">
+          <a href="#soluciones" className="hover:text-secondary">Soluciones</a>
+          <a href="#metodologia" className="hover:text-secondary">Metodología</a>
+          <a href="#contacto" className="hover:text-secondary">Contacto</a>
+          <a href="#quienes" className="hover:text-secondary">Quiénes somos</a>
         </div>
       </div>
     </section>
