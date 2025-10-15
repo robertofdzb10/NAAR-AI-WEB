@@ -1,9 +1,5 @@
-// ──────────────────────────────────────────────────────────────────────────────
-// src/shared/Navbar.jsx
-// ──────────────────────────────────────────────────────────────────────────────
-
 import { useState } from "react";
-import logoUrl from "../assets/naar-logo-dark.png";
+import logoUrl from "../assets/LOGO NAAR_ARTIFICIAL INTELLIGENCE_FONDO OSCURO.svg";
 
 export default function Navbar() {
   const items = [
@@ -17,21 +13,20 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 navbar backdrop-blur w-full">
-      {/* ⚙️ Cambiamos max-w-[1440px] por full width */}
-      <nav className="w-full px-12 h-[88px] flex items-center justify-between">
-        {/* Izquierda: logo pegado al borde */}
-        <a href="#" className="flex flex-col items-start leading-none">
+      {/* Altura más contenida para igualar la referencia */}
+      <nav className="w-full px-16 h-[88px] md:h-[96px] flex items-center justify-between">
+        {/* Logo: sin caption, tamaño protagonista */}
+        <a href="#" className="flex items-center">
           <img
             src={logoUrl}
             alt="NAAR - Artificial Intelligence"
-            className="h-12 w-auto"
+            className="h-[80px] w-auto md:h-[88px] w-auto scale-[1.5]"  // ← aumenta el tamaño real del logo
           />
-          <div className="logo-caption -mt-1">ARTIFICIAL INTELLIGENCE</div>
         </a>
 
-        {/* Derecha: menú + idioma pegados al borde derecho */}
-        <div className="hidden md:flex items-center gap-12">
-          <ul className="flex items-center gap-12">
+        {/* Menú + idioma a la derecha */}
+        <div className="hidden md:flex items-center gap-16">
+          <ul className="flex items-center gap-16">
             {items.map((it) => (
               <li key={it.href}>
                 <a href={it.href} className="nav-item">
@@ -40,9 +35,7 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <a href="#" className="lang-pill">
-            EN
-          </a>
+          <a href="#" className="lang-pill">EN</a>
         </div>
 
         {/* Mobile */}
@@ -51,19 +44,8 @@ export default function Navbar() {
           aria-label="Abrir menú"
           onClick={() => setOpen((v) => !v)}
         >
-          <svg
-            width="26"
-            height="26"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 6h18M3 12h18M3 18h18"
-              stroke="#fff"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </button>
       </nav>
@@ -71,7 +53,7 @@ export default function Navbar() {
       {/* Menú móvil */}
       {open && (
         <div className="md:hidden border-t border-white/10 bg-black/95">
-          <ul className="w-full px-12 py-4 grid gap-3">
+          <ul className="w-full px-16 py-4 grid gap-3">
             {items.map((it) => (
               <li key={it.href}>
                 <a
