@@ -1,4 +1,7 @@
-import aboutUrl from "../assets/about-bg.jpg"; // imagen grande de fondo
+import aboutUrl from "../assets/about-bg.jpg";
+import iconMaletin from "../assets/ICON_MALETIN.svg";
+import iconTecnologia from "../assets/ICON_TECNOLOGIA.svg";
+import iconPersonalizacion from "../assets/ICON_PERSONALIZACION.svg";
 
 export default function About() {
   const NAVBAR_HEIGHT = 96;
@@ -13,7 +16,7 @@ export default function About() {
 
   return (
     <section id="quienes" className="about" aria-label="Quiénes somos">
-      {/* Hero superior con foto */}
+      {/* ───── Hero superior ───── */}
       <div
         className="about-hero"
         style={{ backgroundImage: `url(${aboutUrl})` }}
@@ -22,26 +25,27 @@ export default function About() {
         <div className="about-hero-inner">
           <h2 className="about-title">Innovación en Inteligencia Artificial</h2>
           <p className="about-lead">
-            Somos una empresa especializada en desarrollar soluciones de IA personalizadas <br />
-            que transforman la manera en que las empresas operan y se conectan con sus clientes.<br />
-            Combinamos tecnología de vanguardia con un profundo entendimiento de las <br /> 
+            Somos una empresa especializada en desarrollar soluciones de IA personalizadas
+            que transforman la manera en que las empresas operan y se conectan con sus clientes.
+            Combinamos tecnología de vanguardia con un profundo entendimiento de las
             necesidades empresariales.
           </p>
         </div>
       </div>
 
-      {/* Features (3 columnas) */}
+      {/* ───── Features (3 columnas) ───── */}
       <div className="about-features">
         <div className="about-container">
           <ul className="feature-grid">
             <li className="feature-item">
               <span className="feature-icon">
-                {/* maletín */}
-                <svg viewBox="0 0 24 24" width="34" height="34" fill="none">
-                  <path d="M9 6V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1" stroke="currentColor" strokeWidth="1.7"/>
-                  <rect x="3" y="7" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.7"/>
-                  <path d="M3 12h18" stroke="currentColor" strokeWidth="1.7"/>
-                </svg>
+                <img
+                  src={iconMaletin}
+                  alt="Icono experiencia"
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                />
               </span>
               <h3 className="feature-title">Experiencia</h3>
               <p className="feature-desc">
@@ -51,12 +55,13 @@ export default function About() {
 
             <li className="feature-item">
               <span className="feature-icon">
-                {/* chip */}
-                <svg viewBox="0 0 24 24" width="34" height="34" fill="none">
-                  <rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor" strokeWidth="1.7"/>
-                  <path d="M3 10h4M3 14h4M17 10h4M17 14h4M10 3v4M14 3v4M10 17v4M14 17v4"
-                        stroke="currentColor" strokeWidth="1.7" strokeLinecap="round"/>
-                </svg>
+                <img
+                  src={iconTecnologia}
+                  alt="Icono tecnología"
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                />
               </span>
               <h3 className="feature-title">Tecnología</h3>
               <p className="feature-desc">
@@ -66,12 +71,13 @@ export default function About() {
 
             <li className="feature-item">
               <span className="feature-icon">
-                {/* lapiz */}
-                <svg viewBox="0 0 24 24" width="34" height="34" fill="none">
-                  <path d="M4 20l4-.8 9.2-9.2a2 2 0 0 0 0-2.8l-.4-.4a2 2 0 0 0-2.8 0L4 16v4z"
-                        stroke="currentColor" strokeWidth="1.7" fill="none"/>
-                  <path d="M14 6l4 4" stroke="currentColor" strokeWidth="1.7" />
-                </svg>
+                <img
+                  src={iconPersonalizacion}
+                  alt="Icono personalización"
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                />
               </span>
               <h3 className="feature-title">Personalización</h3>
               <p className="feature-desc">
@@ -82,11 +88,22 @@ export default function About() {
         </div>
       </div>
 
-      {/* Chevron a siguiente sección */}
-      <a href="#metodologia" className="about-chevron" onClick={scrollToNext} aria-label="Sigue leyendo">
+      {/* ───── Chevron hacia siguiente sección ───── */}
+      <a
+        href="#metodologia"
+        className="about-chevron"
+        onClick={scrollToNext}
+        aria-label="Sigue leyendo"
+      >
         <svg width="42" height="42" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5"/>
-          <path d="M8 11l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+          <path
+            d="M8 11l4 4 4-4"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </a>
     </section>

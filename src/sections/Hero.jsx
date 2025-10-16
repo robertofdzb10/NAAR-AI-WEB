@@ -9,9 +9,12 @@ export default function Hero() {
   const scrollToSection = (e) => {
     e.preventDefault();
     const target = document.querySelector("#quienes");
-    if (!target) return;
-    const y = target.getBoundingClientRect().top + window.scrollY - NAVBAR_HEIGHT;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
 
   return (
