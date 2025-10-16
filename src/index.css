@@ -193,7 +193,7 @@ html {
     #000 84%,
     rgba(0,0,0,.85) 90%,
     rgba(0,0,0,.40) 96%,
-    rgba(0,0,0,0) 100%
+    rgba(0,0,0,0) 101%
   );
           mask-image: linear-gradient(
     to bottom,
@@ -201,9 +201,10 @@ html {
     #000 84%,
     rgba(0,0,0,.85) 90%,
     rgba(0,0,0,.40) 96%,
-    rgba(0,0,0,0) 100%
+    rgba(0,0,0,0) 101%
   );
   mask-mode: alpha;
+  border-bottom: 1px solid transparent;
 }
 /* === Fondo (video o imagen) === */
 .hero-bg {
@@ -375,8 +376,10 @@ section[id] { scroll-margin-top: 96px; }
 .about{
   position: relative;
   z-index: 0;           /* por debajo del hero */
-  background: #fff;
+  background: transparent;
   color: #0b0b0b;
+  margin-top: -96px;   /* ⟵ solape */
+  padding-top: 96px;   /* ⟵ compensa layout */
 
   /* ⬇️  hace que la foto quede detrás del tramo transparente del hero */
 }
@@ -391,15 +394,21 @@ section[id] { scroll-margin-top: 96px; }
   place-items: center;
   isolation: isolate;
 }
+/* Oscurecimiento cinematográfico sutil y uniforme */
 .about-hero::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
   background:
-    linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.35) 38%, rgba(0,0,0,.20) 65%, rgba(0,0,0,.10) 100%);
+    radial-gradient(
+      ellipse at 50% 38%, 
+      rgba(0, 0, 0, 0.35) 0%,    /* centro más oscuro que antes */
+      rgba(0, 0, 0, 0.55) 100%   /* bordes un poco más dramáticos */
+    );
   pointer-events: none;
 }
+
 
 /* Difuminado blanco superior en la imagen del about */
 .about-hero::after {
@@ -410,7 +419,7 @@ section[id] { scroll-margin-top: 96px; }
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.7) 0%,   /* blanco fuerte arriba */
+    rgba(255, 255, 255, 0.7) -8%,   /* blanco fuerte arriba */
     rgba(255, 255, 255, 0.6) 8%,   /* transición suave */
     rgba(255, 255, 255, 0.2) 20%,  /* se va aclarando */
     rgba(255, 255, 255, 0.0) 45%   /* transparente hacia el centro */
@@ -428,7 +437,7 @@ section[id] { scroll-margin-top: 96px; }
 .about-title {
   font-family: var(--font-heading);
   color: #fff;
-  font-weight: 800;
+  font-weight: 500;
   font-size: clamp(26px, 4vw, 48px);
   letter-spacing: -0.01em;
   margin: 0 0 14px;

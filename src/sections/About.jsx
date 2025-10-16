@@ -22,10 +22,10 @@ export default function About() {
         <div className="about-hero-inner">
           <h2 className="about-title">Innovación en Inteligencia Artificial</h2>
           <p className="about-lead">
-            Somos una empresa especializada en desarrollar soluciones de IA personalizadas que
-            transforman la manera en que las empresas operan y se conectan con sus clientes.
-            Combinamos tecnología de vanguardia con un profundo entendimiento de las necesidades
-            empresariales.
+            Somos una empresa especializada en desarrollar soluciones de IA personalizadas <br />
+            que transforman la manera en que las empresas operan y se conectan con sus clientes.<br />
+            Combinamos tecnología de vanguardia con un profundo entendimiento de las <br /> 
+            necesidades empresariales.
           </p>
         </div>
       </div>
