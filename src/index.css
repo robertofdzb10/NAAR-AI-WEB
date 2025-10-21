@@ -9,6 +9,15 @@ html, body, #root {
   width: 100%;
 }
 
+:root { --nav-h: 96px; }             /* desktop */
+@media (max-width: 768px){
+  :root { --nav-h: 88px; }           /* móvil: coincide con tu <nav> */
+}
+
+/* el offset de anclas usa la misma altura */
+section[id]{ scroll-margin-top: var(--nav-h); }
+
+
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -183,7 +192,7 @@ html {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  min-height: calc(100svh - 96px);
+  min-height: calc(100svh - var(--nav-h));
   background: #000;
 
   z-index: 1;
@@ -328,9 +337,6 @@ html {
   transform: translate(-50%, -2px);
 }
 
-/* === Scroll offset === */
-section[id] { scroll-margin-top: 96px; }
-
 /* === Ajustes por ratio de pantalla (para vídeo) === */
 @media (min-aspect-ratio: 16/9) {
   .hero-bg { object-position: 56% 54.5%; }
@@ -388,8 +394,8 @@ section[id] { scroll-margin-top: 96px; }
   display: grid;
 
   /* Variables para cálculo de alturas */
-  --nav: 96px;                 /* alto de la navbar */
-  --vh: 100dvh;                /* viewport height dinámico (mejor en móviles) */
+  --nav: var(--nav-h);                 /* alto de la navbar */
+  --vh: 100svh;                /* viewport height dinámico (mejor en móviles) */
   --hero-frac: 0.50;           /* 45% */
   --feat-frac: 0.50;           /* 55% */
 
@@ -628,3 +634,380 @@ section[id] { scroll-margin-top: 96px; }
 /* Evitar cortes de margen */
 .about{ margin-bottom: 0 }
 #metodologia > *, .metodologia > *{ position: relative; z-index: 1 }
+
+/* ——— ABOUT: corrección global (que no se repita la imagen) ——— */
+.about-hero{
+  background-repeat: no-repeat;
+}
+
+/* ────────────────────────────────
+   METODOLOGÍA — fullscreen + número lateral + animaciones
+──────────────────────────────────*/
+.methodology{
+  position: relative;
+  background:#fff;
+
+  /* ocupa todo el viewport menos la navbar */
+  min-height: calc(100svh - var(--nav-h));
+  display: grid;
+  align-content: center;          /* centra verticalmente el contenido */
+  padding: 40px 0 80px;           /* aire + espacio para chevron */
+}
+
+/* Cabecera */
+.methodology-head{
+  text-align:center;
+  max-width: 980px;
+  margin: 0 auto 8px;
+}
+
+.methodology-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(70px, 9vw, 140px);   /* ↑↑ más hueco */
+  align-items: stretch;
+  justify-items: center;
+  margin-top: clamp(44px, 5vw, 72px);
+}
+
+/* Wrapper por fase: referencia para posicionar el número */
+.step{
+  position: relative;
+  width: 100%;
+  display: grid;
+  place-items: center;            /* centra la card en su celda */
+}
+
+/* Card */
+.step-card{
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+  background:#fff;
+  border-radius: 16px;
+  padding: clamp(28px, 2.8vw, 36px);  /* ↑ padding */
+  min-height: clamp(300px, 28vh, 360px); /* ↑ alto mínimo */
+  box-shadow: 0 26px 44px rgba(0,0,0,.16), 0 2px 0 rgba(0,0,0,.05) inset;
+
+  opacity: 0;
+  transform: translateY(14px);
+  transition: transform .28s cubic-bezier(.2,.7,.2,1),
+              box-shadow .28s ease,
+              opacity .4s ease;
+}
+
+.step-card.is-visible{ opacity:1; transform:none; }
+.methodology-grid>.step:nth-child(1) .step-card{ transition-delay:.06s,.06s,.06s; }
+.methodology-grid>.step:nth-child(2) .step-card{ transition-delay:.16s,.16s,.16s; }
+.methodology-grid>.step:nth-child(3) .step-card{ transition-delay:.26s,.26s,.26s; }
+
+/* Sombra “pie” más larga (dos patas en diagonal) */
+.step-card::before,
+.step-card::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  bottom:-14px;
+  width: 50%;
+  height: 16px;
+  filter: blur(7px);
+  opacity:.35;
+  background: linear-gradient(to bottom, rgba(0,0,0,.20), rgba(0,0,0,0));
+}
+.step-card::before{ left:18px;  transform: skewX(-18deg); }
+.step-card::after { right:18px; transform: skewX(18deg); }
+
+/* Borde/columna de sombra en el lateral (opcional: efecto mock) */
+.step-card::marker{ display:none }
+.step-card::selection{ background:none }
+.step-card > ._edge { display:none } /* por si añades un div, esto lo evita */
+.step-card::part(edge){ display:none }
+
+.step-card::backdrop{ /* no usado, sólo para evitar estilos externos */ }
+
+/* Bisel lateral sutil */
+.step-card::shadow { display:none } /* placeholder */
+
+.step-card::cue { display:none } /* placeholder */
+
+.step-card::cue-region { display:none } /* placeholder */
+
+.step-card::target-text { display:none } /* placeholder */
+
+.step-card::spelling-error { display:none } /* placeholder */
+
+.step-card::grammar-error { display:none } /* placeholder */
+
+.step-card::before-edge{
+  /* no estándar; dejamos el estilo real en ::after/::before del bloque siguiente */
+}
+
+/* Borde vertical simulado */
+.step-card::view-transition-new(root){ /* noop */ }
+
+/* Reborde real (fino, opcional) */
+.step-card::selection{ /* noop */ }
+
+/* Activar si quieres el reborde: descomenta este bloque */
+/*
+.step-card::edge {
+  content:"";
+  position:absolute;
+  left:-12px;
+  top:12px; bottom:12px;
+  width:10px;
+  border-radius:6px;
+  background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,0));
+  filter: blur(0.2px);
+  opacity:.65;
+  z-index:1;
+  pointer-events:none;
+}
+*/
+
+/* Número XXL — más fuera, color más oscuro */
+.step-num{
+  position: absolute;
+  top: 50%;
+  left: -26%;
+  transform: translateY(-50%);
+  font-weight: 900;
+  font-family: var(--font-heading);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-size: clamp(220px, 26vw, 360px); /* ↑ tamaño */
+  color: var(--color-secondary);   /* TURQUESA */
+  opacity: .22;                    /* presencia */
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+  transition: transform .35s ease, opacity .35s ease;
+}
+/* Ajustes por columna para que respiren bien */
+.methodology-grid > .step:nth-child(2) .step-num { left: -28%; }
+.methodology-grid > .step:nth-child(3) .step-num { left: -30%; }
+
+/* Hover parallax (opcional, sin cambios fuertes) */
+.step:hover .step-num{
+  transform: translateY(-50%) translateX(-6px) scale(1.02);
+  opacity: .26;
+}
+
+
+
+/* Contenido tipográfico */
+.step-title{
+  position:relative; z-index:2;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-secondary);
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 1.12;
+  margin: 6px 0 10px;
+  white-space: pre-line;          /* respeta \n en títulos */
+  transition: text-shadow .3s ease;
+}
+.step-desc{ position:relative; z-index:2; color:#344054; }
+.step-list{
+  position:relative; z-index:2;
+  margin-top:10px; padding-left:0; list-style:none; color:#4b5563;
+}
+.step-list li::before{ content:"·"; margin-right:8px; font-weight:900; color:#6b7280; }
+
+/* Hover parallax */
+.step:hover .step-num {
+  transform: translateY(-50%) translateX(-6px) scale(1.02);
+  opacity: 0.22;
+}
+
+.step-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 30px 48px rgba(0,0,0,.17), 0 2px 0 rgba(0,0,0,.06) inset;
+}
+.step-card:hover::before,
+.step-card:hover::after{ opacity:.45; filter: blur(8px); }
+.step-card:hover .step-title{ text-shadow: 0 0 1px rgba(0,0,0,.06); }
+
+/* Chevron (scroll hint) */
+.methodology-chevron{
+  position: absolute;
+  left: 50%;
+  bottom: 18px;                  /* misma altura */
+  transform: translateX(-50%);
+  color: #111;                   /* mismo color base que About */
+  line-height: 0;                /* elimina espacio inline */
+  display: inline-flex;
+  transition: color .18s ease, transform .18s ease;
+  z-index: 3;
+}
+
+.methodology-chevron:hover{
+  color: var(--color-secondary);
+  transform: translate(-50%, -2px);
+}
+
+/* Responsive */
+@media (max-width: 1024px){
+  .methodology-grid{ gap:24px; }
+}
+/* 4) Móvil: cards grandes pero sin romper */
+@media (max-width: 960px){
+  .methodology-grid{ grid-template-columns: 1fr; gap: 32px; }
+  .step-card{ min-height: clamp(280px, 36vh, 340px); }
+  .step-num{
+    left: -10%;
+    font-size: clamp(160px, 34vw, 280px);
+    opacity: .18;                 /* un pelín menos para móvil */
+  }
+  .methodology-grid > .step:nth-child(2) .step-num { left: -12%; }
+  .methodology-grid > .step:nth-child(3) .step-num { left: -14%; }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .step-card, .step-num, .methodology-chevron{
+    transition:none !important; animation:none !important;
+  }
+  .step-card{ opacity:1; transform:none; }
+}
+
+
+
+
+
+
+/* --------------------------------------------------------------------------- */
+
+
+
+/* ===== Móvil: hero + features caben ENTEROS en un viewport ===== */
+@media (max-width: 640px) {
+
+  /* Altura del navbar móvil sincronizada con el componente */
+  :root {
+    --about-hero-share: 42; /* % del alto total para el hero (ajusta 40–50 según gusto) */
+  }
+
+  .about {
+    --nav: 88px; /* Altura real del navbar móvil */
+    height: calc(100svh - var(--nav));
+    min-height: calc(100svh - var(--nav));
+
+    box-sizing: border-box;
+    margin-top: 0;     /* sin solape con el hero */
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;     /* CLAVE: permite encoger a los hijos */
+  }
+
+  /* ────────────────────────────────
+     HERO (parte superior del about)
+  ──────────────────────────────── */
+  .about-hero {
+    flex: 0 0 calc(var(--about-hero-share) * 1%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 16px 8px;
+    background-size: cover;
+    background-position: center;
+    min-height: 0;
+  }
+
+  .about-hero-inner {
+    padding: 0;
+    max-width: 520px;
+    text-align: center;
+  }
+
+  .about-title {
+    font-size: clamp(22px, 6.2vw, 28px);
+    line-height: 1.15;
+    margin: 0 0 6px;
+    color: #fff;
+  }
+
+  .about-lead {
+    font-size: clamp(12.5px, 3.2vw, 14.5px);
+    line-height: 1.35;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+.about-hero::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.60) 0%,
+    rgba(255, 255, 255, 0.28) 14%,
+    rgba(255, 255, 255, 0.08) 28%,
+    rgba(255, 255, 255, 0) 42%
+  );
+}
+
+  /* ────────────────────────────────
+     FEATURES (parte inferior del about)
+  ──────────────────────────────── */
+  .about-features {
+    flex: 1 1 auto;
+    display: grid;
+    place-items: center;
+    padding: 8px 0 10px;
+    box-shadow: 0 -10px 22px rgba(0, 0, 0, 0.06) inset;
+    min-height: 0;
+    background: #fff;
+  }
+
+  .about-container {
+    width: 100%;
+    max-width: 520px;
+    height: 100%;
+    padding: 0 14px;
+    display: grid;
+    min-height: 0;
+  }
+
+  .feature-grid {
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(3, minmax(0, 1fr)); /* tres filas iguales */
+    gap: 10px;
+    align-items: stretch;
+    justify-items: center;
+    text-align: center;
+    min-height: 0;
+  }
+
+  .feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 4px;
+    min-height: 0;
+  }
+
+  .feature-icon {
+    width: clamp(78px, 18vw, 96px);
+    height: clamp(78px, 18vw, 96px);
+    margin-bottom: 4px;
+  }
+
+  .feature-title {
+    font-size: clamp(18px, 5vw, 22px);
+    margin: 2px 0 2px;
+    font-weight: 700;
+    color: var(--color-secondary);
+  }
+
+  .feature-desc {
+    font-size: clamp(12px, 3.2vw, 14px);
+    line-height: 1.35;
+    max-width: 32ch;
+    margin: 0 auto;
+    color: #4b5563;
+  }
+}
+

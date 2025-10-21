@@ -20,7 +20,7 @@ export default function Navbar() {
           <img
             src={logoUrl}
             alt="NAAR - Artificial Intelligence"
-            className="h-[80px] w-auto md:h-[88px] w-auto scale-[1.5] logo-img"  // ← aumenta el tamaño real del logo
+            className="h-[80px] w-auto md:h-[88px] w-auto scale-[1.5] logo-img"
           />
         </a>
 
