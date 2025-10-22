@@ -1,103 +1,64 @@
-import { useState } from 'react'
-
 export default function Contact() {
-  const [status, setStatus] = useState('idle')
-  const [error, setError] = useState('')
-
-  const onSubmit = async (e) => {
-    e.preventDefault()
-    setStatus('loading')
-    setError('')
-
-    const data = Object.fromEntries(new FormData(e.currentTarget))
-
-    // Honeypot: si el campo oculto tiene contenido, abortar
-    if (data.company) {
-      setStatus('idle')
-      return
-    }
-
-    // Validación básica
-    const emailOk = /.+@.+\..+/.test(data.email)
-    if (!emailOk) {
-      setStatus('idle')
-      setError('Introduce un correo válido')
-      return
-    }
-
-    if (!data.privacy) {
-      setStatus('idle')
-      setError('Debes aceptar la política de privacidad')
-      return
-    }
-
-    // Opción rápida: Formspree (reemplaza TU_ENDPOINT)
-    const res = await fetch('https://formspree.io/f/TU_ENDPOINT', {
-      method: 'POST',
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: data.name,
-        email: data.email,
-        message: data.message
-      })
-    })
-
-    setStatus(res.ok ? 'success' : 'error')
-    if (!res.ok) setError('No se pudo enviar el mensaje. Inténtalo de nuevo.')
-  }
-
   return (
-    <section id="contacto" className="bg-white">
-      <div className="max-w-3xl mx-auto px-4 py-16">
-        <h2 className="text-2xl md:text-3xl font-bold text-primary">¿Hablamos?</h2>
-        <p className="mt-2 text-slate-700">Estamos listos para ayudarte a transformar tus ideas.</p>
-
-        <form onSubmit={onSubmit} className="mt-8 grid gap-4" noValidate>
-          <div className="grid md:grid-cols-2 gap-4">
-            <label className="grid gap-2">
-              <span className="text-sm">Nombre *</span>
-              <input name="name" required className="border rounded-xl px-4 py-3" />
-            </label>
-            <label className="grid gap-2">
-              <span className="text-sm">Correo electrónico *</span>
-              <input name="email" type="email" required className="border rounded-xl px-4 py-3" />
-            </label>
-          </div>
-
-          <label className="grid gap-2">
-            <span className="text-sm">Mensaje *</span>
-            <textarea name="message" required rows="5" className="border rounded-xl px-4 py-3"></textarea>
-          </label>
-
-          {/* Honeypot */}
-          <input type="text" name="company" tabIndex="-1" autoComplete="off" className="hidden" aria-hidden="true" />
-
-          <label className="flex items-start gap-2 text-sm">
-            <input name="privacy" type="checkbox" />
-            <span>
-              Acepto la <a href="#" className="underline">Política de privacidad</a> y consiento el tratamiento de mis datos para responder a mi consulta.
-            </span>
-          </label>
-
-          <div className="grid gap-2">
-            <button disabled={status==='loading'} className="btn-primary">
-              {status==='loading' ? 'Enviando…' : 'Enviar'}
-            </button>
-            <div aria-live="polite" className="text-sm">
-              {status==='success' && <p className="text-green-700">¡Mensaje enviado! Te contactaremos en breve.</p>}
-              {status==='error' && <p className="text-red-700">{error}</p>}
-            </div>
-          </div>
-
-          <p className="text-xs text-slate-500">
-            Puedes ejercer tus derechos escribiendo a <a className="underline" href="mailto:info@naar.es">info@naar.es</a>.
+    <section id="contacto" className="contact">
+      <div className="contact-inner">
+        {/* Lado Izquierdo */}
+        <div className="contact-left">
+          <h2 className="contact-title">¿Hablamos?</h2>
+          <p className="contact-lead">
+            Estamos listos para ayudarte a transformar tus ideas en soluciones de IA innovadoras.
+            Contáctanos para comenzar.
           </p>
-        </form>
 
-        <div className="mt-8 text-sm text-slate-600">
-          <p><strong>Tel:</strong> +34 946 52 87 16 &nbsp;•&nbsp; <strong>Email:</strong> info@naar.es</p>
+          <ul className="contact-chips" aria-label="Datos de contacto">
+            <li className="chip">
+              <span className="chip-icon" aria-hidden="true">
+                {/* phone */}
+                <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.11 5.18 2 2 0 0 1 5.1 3h3a2 2 0 0 1 2 1.72c.12.89.31 1.76.57 2.6a2 2 0 0 1-.45 2.11L9.1 10.91a16 16 0 0 0 4 4l1.48-1.13a2 2 0 0 1 2.11-.45c.84.26 1.71.45 2.6.57A2 2 0 0 1 22 16.92Z" fill="currentColor"/></svg>
+              </span>
+              <a href="tel:+34946528716">+34 946 52 87 16</a>
+            </li>
+            <li className="chip">
+              <span className="chip-icon" aria-hidden="true">
+                {/* mail */}
+                <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2
+                 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5L4 8V6l8 5 8-5Z" fill="currentColor"/></svg>
+              </span>
+              <a href="mailto:info@naar.es">info@naar.es</a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Tarjeta del formulario */}
+        <div className="contact-card" role="form" aria-label="Formulario de contacto">
+          <h3 className="card-title">Información de Contacto</h3>
+
+          <form className="contact-form" onSubmit={(e)=>e.preventDefault()}>
+            <label className="field">
+              <span>Nombre *</span>
+              <input type="text" name="name" required />
+            </label>
+
+            <label className="field">
+              <span>Correo electrónico *</span>
+              <input type="email" name="email" required />
+            </label>
+
+            <label className="field field--textarea">
+              <span>Mensaje *</span>
+              <textarea name="message" rows="4" required />
+            </label>
+
+            <p className="gdpr">
+              Trataremos sus datos para ponernos en contacto con usted y responder a su
+              mensaje. Puede ejercer sus derechos escribiéndonos a <a href="mailto:info@naar.es">info@naar.es</a>.
+              Más información en la <a href="/privacidad">Política de privacidad</a>.
+            </p>
+
+            <button className="btn-submit" type="submit">Enviar</button>
+          </form>
         </div>
       </div>
     </section>
-  )
+  );
 }
