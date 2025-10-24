@@ -5,6 +5,7 @@ import Methodology from '../sections/Methodology'
 import Solutions from '../sections/Solutions'
 import Contact from '../sections/Contact'
 import Footer from '../shared/Footer'
+import ChatWidget from '../components/ChatWidget'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <ChatWidget />
     </div>
   )
 }

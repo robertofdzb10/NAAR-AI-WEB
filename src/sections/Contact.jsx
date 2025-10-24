@@ -1,7 +1,48 @@
+import { useState } from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { HiMail } from "react-icons/hi";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 export default function Contact() {
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(null); // "ok" | "error" | null
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (loading) return;
+
+    const form = e.currentTarget;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    // honeypot (campo invisible). Si viene relleno, ignoramos.
+    if (form.company.value) return setStatus("ok");
+
+    if (!name || !email || !message) return;
+
+    setLoading(true);
+    setStatus(null);
+
+    try {
+      const res = await fetch(`${API_URL}/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (!res.ok) throw new Error("bad status");
+
+      setStatus("ok");
+      form.reset();
+    } catch (err) {
+      setStatus("error");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <section id="contacto" className="contact" aria-label="Contacto">
       <div className="contact-inner">
@@ -35,21 +76,31 @@ export default function Contact() {
         <div className="contact-right" role="form" aria-labelledby="contact-title">
           <h3 id="contact-title">Información de Contacto</h3>
 
-          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
+          <form className="contact-form" onSubmit={handleSubmit} noValidate>
+            {/* Honeypot anti-spam (oculto) */}
+            <input
+              type="text"
+              name="company"
+              tabIndex="-1"
+              autoComplete="off"
+              aria-hidden="true"
+              style={{ position: "absolute", left: "-5000px" }}
+            />
+
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="name">Nombre *</label>
-                <input id="name" type="text" required />
+                <input id="name" name="name" type="text" required />
               </div>
               <div className="form-group">
                 <label htmlFor="email">Correo electrónico *</label>
-                <input id="email" type="email" required />
+                <input id="email" name="email" type="email" required />
               </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="msg">Mensaje *</label>
-              <textarea id="msg" required></textarea>
+              <label htmlFor="message">Mensaje *</label>
+              <textarea id="message" name="message" required />
             </div>
 
             <p className="form-privacy">
@@ -58,7 +109,20 @@ export default function Contact() {
               Más información en la <a href="#">Política de privacidad</a>.
             </p>
 
-            <button type="submit" className="contact-btn">Enviar</button>
+            <button type="submit" className="contact-btn" disabled={loading}>
+              {loading ? "Enviando..." : "Enviar"}
+            </button>
+
+            {status === "ok" && (
+              <p style={{ color: "#10b981", marginTop: 8 }}>
+                ¡Mensaje enviado! Te responderemos en breve.
+              </p>
+            )}
+            {status === "error" && (
+              <p style={{ color: "#ef4444", marginTop: 8 }}>
+                Hubo un problema al enviar. Inténtalo de nuevo.
+              </p>
+            )}
           </form>
         </div>
       </div>
