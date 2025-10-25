@@ -887,27 +887,27 @@ html {
     opacity: .18;
   }
 }
-
 /* ───────────── SOLUCIONES (tiles) ───────────── */
 .solutions {
   position: relative;
   background: #fff;
-  padding: 0 0 60px;
+  padding: 0 0 100px; /* espacio para el chevron */
 }
 
 .solutions-head {
   padding: 24px 0 10px;
   text-align: center;
 }
+
 .solutions-title {
+  margin: 0;
   font-family: var(--font-heading);
   font-weight: 900;
   font-size: clamp(30px, 4.8vw, 52px);
   letter-spacing: -0.01em;
-  margin: 0;
 }
 
-/* Grid de 3 columnas (una en móvil) */
+/* Grid de 3 columnas (1 en tablet/móvil) */
 .solutions-grid {
   position: relative;
   width: min(100%, 1400px);
@@ -918,6 +918,7 @@ html {
   gap: clamp(12px, 1.8vw, 22px);
 }
 
+/* Tarjeta base */
 .sol-card {
   position: relative;
   isolation: isolate;
@@ -926,79 +927,169 @@ html {
   background-position: center;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(17,17,17,.12);
   outline: none;
+
+  /* borde sutil */
+  box-shadow: inset 0 0 0 1px rgba(17,17,17,.12);
+
+  /* animaciones suaves */
   transition: transform .28s ease, box-shadow .28s ease;
-}
-.sol-card:hover { transform: translateY(-2px); box-shadow:
-  0 24px 60px rgba(0,0,0,.24), inset 0 0 0 1px rgba(17,17,17,.12); }
-.sol-card:is(:focus-visible){ box-shadow: 0 0 0 3px var(--color-secondary), 0 18px 40px rgba(0,0,0,.22); }
 
-/* Oscurecimiento y bordes verticales finos (como en mock) */
+  /* Fuerza capa propia -> menos jank al pasar rápido entre cards */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.sol-card:hover {
+  transform: translateY(-2px) translateZ(0);
+  /* sombra más ligera y barata de pintar */
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.22),
+    inset 0 0 0 1px rgba(17,17,17,.12);
+}
+
+/* accesibilidad al tab (focus con teclado) */
+.sol-card:is(:focus-visible) {
+  box-shadow:
+    0 0 0 3px var(--color-secondary),
+    0 18px 40px rgba(0,0,0,.22);
+}
+
+/* Capa oscura degradada sobre la imagen */
 .sol-overlay {
-  position: absolute; inset: 0; z-index: 0;
-  background:
-    linear-gradient(to top, rgba(0,0,0,.58) 0%, rgba(0,0,0,.42) 26%, rgba(0,0,0,.1) 60%, rgba(0,0,0,0) 100%),
-    linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,0) 16%, rgba(255,255,255,0) 84%, rgba(255,255,255,.08));
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   pointer-events: none;
+
+  /* misma idea: capa propia estable */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,.58) 0%,
+      rgba(0,0,0,.42) 26%,
+      rgba(0,0,0,.1) 60%,
+      rgba(0,0,0,0) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,0) 16%,
+      rgba(255,255,255,0) 84%,
+      rgba(255,255,255,.08)
+    );
 }
 
-/* Título grande pegado abajo (cuando el panel está cerrado) */
+/* Título grande (estado cerrado) */
 .sol-title-wrap {
-  position: absolute; left: 0; right: 0; bottom: 84px; z-index: 1;
-  display: grid; gap: 2px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(24px, 4vh, 48px);
+  z-index: 2;
+  display: grid;
+  gap: 2px;
   padding: 0 clamp(18px, 2.2vw, 26px);
   color: #fff;
   text-shadow: 0 2px 14px rgba(0,0,0,.45);
+  transition: opacity .25s ease;
 }
+
+.sol-kicker,
+.sol-title,
+.sol-info h4 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: .01em;
+}
+
 .sol-kicker {
-  margin: 0; font-family: var(--font-heading);
-  font-weight: 800; letter-spacing: .01em;
+  font-weight: 800;
   font-size: clamp(18px, 2vw, 24px);
 }
+
 .sol-title {
-  margin: 0; font-family: var(--font-heading);
-  font-weight: 900; letter-spacing: .005em;
+  font-weight: 900;
+  letter-spacing: .005em;
   font-size: clamp(26px, 3.4vw, 40px);
 }
 
-/* Panel blanco deslizante */
+/* Tarjeta blanca emergente */
 .sol-info {
   position: absolute;
   left: clamp(14px, 2vw, 20px);
   right: clamp(14px, 2vw, 20px);
-  bottom: clamp(68px, 7.5vh, 90px);
-  z-index: 2;
+  bottom: clamp(14px, 2vh, 20px);
+  z-index: 3;
   background: #fff;
   border-radius: 8px;
   box-shadow:
-    0 22px 44px rgba(0,0,0,.26),
+    0 22px 44px rgba(0,0,0,.4),
     0 1px 0 rgba(0,0,0,.06) inset;
-  padding: clamp(16px, 2.2vw, 22px) clamp(16px, 2.4vw, 26px);
-  transform: translateY(110%);
-  transition: transform .35s cubic-bezier(.2,.7,.2,1);
+  padding: clamp(16px, 2.2vw, 22px)
+           clamp(16px, 2.4vw, 26px)
+           clamp(20px, 2.4vw, 26px);
+
+  /* empieza escondida */
+  transform: translateY(110%) translateZ(0);
+  transition: transform .35s cubic-bezier(.25,.8,.25,1);
+
+  /* capa propia también */
+  backface-visibility: hidden;
 }
+
 .sol-info h4 {
-  margin: 0 0 8px;
-  font-family: var(--font-heading);
   font-weight: 900;
   font-size: clamp(20px, 2.6vw, 28px);
 }
-.sol-info p { margin: 0 0 10px; color: #3c3c3c }
-.sol-bullets { margin: 0; padding-left: 18px; color: #424242 }
-.sol-bullets li { margin: 2px 0 }
 
-/* ─────────────── Chevron de SOLUCIONES ─────────────── */
-.solutions {
-  position: relative;
-  background: #fff;
-  padding: 0 0 100px; /* da espacio para el chevron */
+.sol-info p {
+  margin: 0 0 10px;
+  color: #3c3c3c;
 }
 
+.sol-bullets {
+  margin: 0;
+  padding-left: 18px;
+  color: #424242;
+}
+
+.sol-bullets li {
+  margin: 2px 0;
+}
+
+/* Abrir tarjeta (hover desktop o click .is-open) */
+.sol-card:hover .sol-info,
+.sol-card.is-open .sol-info {
+  /* Sube un poco, no hasta el centro */
+  transform: translateY(-16%) translateZ(0);
+}
+
+/* Al abrir, escondemos el título suelto */
+.sol-card:hover .sol-title-wrap,
+.sol-card.is-open .sol-title-wrap {
+  opacity: 0;
+}
+
+/* IMPORTANTE:
+   Ya no atenuamos las demás cards al hacer hover.
+   Así evitamos repintar todo el grid constantemente.
+*/
+.solutions-grid:hover .sol-card:not(:hover) {
+  opacity: 1;
+  filter: none;
+  transition: none;
+}
+
+/* Chevron inferior */
 .solutions-chevron {
   position: absolute;
   left: 50%;
-  bottom: 20px; /* fijo al fondo visible */
+  bottom: 20px;
   transform: translateX(-50%);
   color: #111;
   background: transparent;
@@ -1019,24 +1110,38 @@ html {
   height: 42px;
 }
 
-
-/* Interacciones: al hover (o .is-open por teclado) sube el panel */
-.sol-card:hover .sol-info,
-.sol-card.is-open .sol-info { transform: translateY(0); }
-
-/* En hover del grid, los no-hover se atenúan */
-.solutions-grid:hover .sol-card:not(:hover) { opacity: .55; filter: saturate(.92); }
-
 /* RESPONSIVE */
 @media (max-width: 1024px) {
-  .solutions-grid { grid-template-columns: 1fr; }
-  .sol-card { min-height: clamp(380px, 64vh, 680px); }
-  .sol-info { bottom: clamp(74px, 10vh, 120px); }
+  .solutions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sol-card {
+    min-height: clamp(380px, 64vh, 680px);
+  }
 }
 
+/* MOBILE:
+   - panel blanco siempre visible
+   - sin animación
+   - sin título flotante encima
+*/
 @media (max-width: 640px) {
-  .sol-info { transform: none !important; }
+  .sol-info {
+    transform: translateY(0) translateZ(0) !important;
+    transition: none;
+  }
+
+  .sol-title-wrap {
+    display: none;
+  }
+
+  .solutions-grid:hover .sol-card:not(:hover) {
+    opacity: 1;
+    filter: none;
+  }
 }
+
 
 
 /* ────────────────────────────────
