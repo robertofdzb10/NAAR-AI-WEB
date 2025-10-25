@@ -104,7 +104,13 @@ export default function Solutions() {
           const el =
             document.querySelector("#contacto") ||
             document.querySelector("#soluciones")?.nextElementSibling;
-          el?.scrollIntoView({ behavior: "smooth" });
+
+          if (el) {
+            el.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
         }}
       >
         <svg

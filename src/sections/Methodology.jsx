@@ -61,6 +61,23 @@ export default function Methodology() {
     return () => obs.disconnect();
   }, []);
 
+  const scrollNext = () => {
+    const el =
+      document.querySelector("#soluciones") ||
+      document.querySelector("#contacto") ||
+      document.querySelector("#metodologia")?.nextElementSibling;
+
+    if (!el) return;
+
+    const prefersReduced =
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    el.scrollIntoView({
+      behavior: prefersReduced ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
   return (
     <section id="metodologia" className="methodology">
       <div className="methodology-inner">
@@ -92,20 +109,21 @@ export default function Methodology() {
           ))}
         </div>
       </div>
+
       <button
         className="methodology-chevron"
         aria-label="Sigue leyendo"
-        onClick={() => {
-          const el =
-            document.querySelector("#soluciones") ||
-            document.querySelector("#contacto") ||
-            document.querySelector("#metodologia")?.nextElementSibling;
-          if (el) el.scrollIntoView({ behavior: "smooth" });
-        }}
+        onClick={scrollNext}
       >
         <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M8 11l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M8 11l4 4 4-4"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
     </section>

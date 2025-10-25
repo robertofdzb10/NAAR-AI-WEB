@@ -9,7 +9,6 @@ export default function About() {
     const el = document.querySelector("#metodologia");
     if (!el) return;
 
-    // Respeta usuarios con “reduced motion”
     const prefersReduced =
       window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 

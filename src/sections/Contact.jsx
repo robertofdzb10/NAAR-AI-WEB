@@ -17,7 +17,7 @@ export default function Contact() {
     const email = form.email.value.trim();
     const message = form.message.value.trim();
 
-    // honeypot (campo invisible). Si viene relleno, ignoramos.
+    // honeypot
     if (form.company.value) return setStatus("ok");
 
     if (!name || !email || !message) return;
@@ -46,7 +46,7 @@ export default function Contact() {
   return (
     <section id="contacto" className="contact" aria-label="Contacto">
       <div className="contact-inner">
-        {/* ───── Izquierda ───── */}
+        {/* Izquierda */}
         <div className="contact-left">
           <div className="contact-head">
             <h2>¿Hablamos?</h2>
@@ -72,7 +72,7 @@ export default function Contact() {
           </ul>
         </div>
 
-        {/* ───── Derecha (formulario) ───── */}
+        {/* Derecha */}
         <div className="contact-right" role="form" aria-labelledby="contact-title">
           <h3 id="contact-title">Información de Contacto</h3>
 

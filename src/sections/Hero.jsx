@@ -3,18 +3,20 @@ import { useState } from "react";
 import heroUrl from "../assets/hero-bg.jpg";
 
 export default function Hero() {
-  const NAVBAR_HEIGHT = 96;
   const [ready, setReady] = useState(false);
 
   const scrollToSection = (e) => {
     e.preventDefault();
     const target = document.querySelector("#quienes");
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+    if (!target) return;
+
+    const prefersReduced =
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    target.scrollIntoView({
+      behavior: prefersReduced ? "auto" : "smooth",
+      block: "start",
+    });
   };
 
   return (
@@ -49,6 +51,9 @@ export default function Hero() {
           Nuestras soluciones de IA potencian el futuro de tu negocio.
         </p>
 
+        {/* CTA principal → no forzamos scroll manual aquí, es navegación normal por ancla,
+           pero si quieres el mismo smooth controlado que en el chevron, puedes
+           convertir esto en onClick y hacer scrollIntoView también. */}
         <a href="#soluciones" className="cta">
           <span>Ver más</span>
           <span className="sr-only"> sobre nuestras soluciones</span>
@@ -64,7 +69,13 @@ export default function Hero() {
       >
         <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
-          <path d="M8 11l4 4 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M8 11l4 4 4-4"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </a>
     </section>
