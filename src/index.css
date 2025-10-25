@@ -653,7 +653,7 @@ html {
 }
 
 /* ────────────────────────────────
-   METODOLOGÍA — centrado real y uniforme
+   METODOLOGÍA — mismo layout visual original
 ──────────────────────────────────*/
 .methodology {
   position: relative;
@@ -661,15 +661,16 @@ html {
   min-height: calc(100svh - var(--nav-h));
   display: grid;
   align-content: center;
-  padding: 60px 0 100px;
-  overflow-x: clip; /* evita scroll lateral por los números XXL */
+  padding: 60px 0 120px; /* deja sitio para el chevron */
+  overflow-x: hidden;    /* evita scroll lateral por los números XXL */
 }
 
-@supports not (overflow: clip) {
-  .methodology { overflow-x: hidden; }
+/* Contenedor interior */
+.methodology-inner {
+  width: min(100%, 1280px);
+  margin-inline: auto;
+  padding-inline: 0;
 }
-
-
 
 /* ─────────────── Cabecera ─────────────── */
 .methodology-head {
@@ -696,16 +697,26 @@ html {
 }
 
 /* ─────────────── GRID ─────────────── */
+/* NOTA: recuperamos exactamente tu offset horizontal original:
+   - grid centrada en una caja de 1280
+   - luego desplazada -70px con transform
+   Eso es lo que hace que las tarjetas "parezcan" centradas
+   mientras los números sobresalen igual que en tu captura antigua. */
 .methodology-grid {
   width: min(100%, 1280px);
   margin-inline: auto;
   display: grid;
-  transform: translateX(-70px); /* compensa el padding interno */
+
+  /* ESTE ERA EL HACK ORIGINAL */
+  transform: translateX(-70px);
+
   grid-template-columns: repeat(3, minmax(400px, 1fr));
   gap: clamp(110px, 8vw, 180px);
   align-items: stretch;
   justify-items: stretch;
   margin-top: clamp(44px, 5vw, 72px);
+
+  will-change: transform; /* micro-opt para que el -70px no repinte cada frame */
 }
 
 /* Paso */
@@ -725,10 +736,12 @@ html {
   border-radius: 18px;
   padding: clamp(36px, 3vw, 48px);
   min-height: clamp(340px, 34vh, 420px);
+
   box-shadow:
     0 28px 48px rgba(0, 0, 0, 0.16),
     0 10px 22px rgba(0, 0, 0, 0.06),
-    0 1px 0 rgba(0, 0, 0, 0.04) inset;
+    inset 0 1px 0 rgba(0, 0, 0, 0.04);
+
   opacity: 0;
   transform: translateY(18px);
   transition:
@@ -742,7 +755,7 @@ html {
   transform: none;
 }
 
-/* Sombras inferiores */
+/* Sombras inferiores (idénticas a las tuyas originales con skew) */
 .step-card::before,
 .step-card::after {
   content: "";
@@ -753,17 +766,39 @@ html {
   height: 18px;
   filter: blur(10px);
   opacity: .4;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, .22), rgba(0, 0, 0, 0));
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, .22),
+    rgba(0, 0, 0, 0)
+  );
 }
 
-.step-card::before { left: 20px; transform: skewX(-16deg); }
-.step-card::after  { right: 20px; transform: skewX(16deg); }
+.step-card::before {
+  left: 20px;
+  transform: skewX(-16deg);
+}
+
+.step-card::after  {
+  right: 20px;
+  transform: skewX(16deg);
+}
+
+/* Hover elevación */
+.step-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 36px 60px rgba(0, 0, 0, .22),
+    0 10px 22px rgba(0, 0, 0, .08),
+    inset 0 1px 0 rgba(0, 0, 0, 0.04);
+}
 
 /* ─────────────── NÚMEROS XXL ─────────────── */
+/* Volvemos a EXACTO: left:-28% y escala hover.
+   Esto es lo que te daba esa superposición como en la captura "antes". */
 .step-num {
   position: absolute;
   top: 50%;
-  left: -28%; /* igual para 1, 2 y 3 */
+  left: -28%;
   transform: translateY(-54%);
   font-family: var(--font-heading);
   font-weight: 700;
@@ -775,20 +810,13 @@ html {
   user-select: none;
   z-index: 1;
   transition: transform .35s ease, opacity .35s ease;
+  will-change: transform, opacity;
 }
 
 /* Hover sutil */
 .step:hover .step-num {
   transform: translateY(-54%) translateX(-6px) scale(1.06);
   opacity: .32;
-}
-
-.step-card:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 36px 60px rgba(0, 0, 0, .22),
-    0 10px 22px rgba(0, 0, 0, .08),
-    0 1px 0 rgba(0, 0, 0, .04) inset;
 }
 
 /* ─────────────── Tipografía interna ─────────────── */
@@ -799,7 +827,7 @@ html {
   font-size: clamp(26px, 2.8vw, 38px);
   line-height: 1.14;
   margin: 8px 0 12px;
-  white-space: pre-line;
+  white-space: pre-line; /* respeta saltos \n del título */
 }
 
 .step-desc {
@@ -815,65 +843,83 @@ html {
   color: #444;
 }
 
+.step-list li {
+  display: flex;
+  align-items: flex-start;
+}
+
 .step-list li::before {
   content: "·";
   margin-right: 8px;
   font-weight: 900;
   color: #6b7280;
+  line-height: 1;
 }
 
 /* ─────────────── Chevron ─────────────── */
-/* La sección es el contenedor de referencia */
-.methodology {
-  position: relative;
-  padding-bottom: 120px; /* deja sitio para el botón */
-}
-
-/* Botón centrado, al fondo de la sección */
 .methodology-chevron {
   position: absolute;
   left: 50%;
-  bottom: 18px;                 /* igual que en About; ajusta si quieres */
+  bottom: 18px;
   transform: translateX(-50%);
-  color: #111;
   background: transparent;
   border: 0;
+  padding: 0;
   cursor: pointer;
+  color: #111;
   z-index: 10;
-  transition: color .18s ease, transform .18s ease, background-color .18s ease;
+  transition: color .18s ease, transform .18s ease;
+  will-change: transform, color;
 }
+
 .methodology-chevron svg {
-  width: 42px; height: 42px;
-  stroke: currentColor; stroke-width: 1.6; fill: none;
+  width: 42px;
+  height: 42px;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  fill: none;
 }
 
-/* Hover: borde e icono turquesa; Active: fondo turquesa + icono blanco */
-.methodology-chevron:hover   { color: var(--color-secondary); transform: translate(-50%, -2px); }
-
-@media (max-width: 768px){
-  .methodology { padding-bottom: 100px; }
-  .methodology-chevron { bottom: 14px; }
+.methodology-chevron:hover {
+  color: var(--color-secondary);
+  transform: translate(-50%, -2px);
 }
-
 
 /* ─────────────── Responsive ─────────────── */
 @media (max-width: 1200px) {
   .methodology-grid {
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 60px;
+    transform: none; /* en tablet ya no forzamos el -70px */
+    width: 100%;
+    max-width: 1280px;
+    padding-inline: clamp(24px, 4vw, 40px);
+    box-sizing: border-box;
+  }
+
+  .step-num {
+    left: -20%;
   }
 }
 
 @media (max-width: 768px) {
+  .methodology {
+    padding-bottom: 100px; /* hueco para el chevron en pantallas pequeñas */
+  }
+
+  .methodology-chevron {
+    bottom: 14px;
+  }
+
   .methodology-inner {
     --gutter: clamp(24px, 6vw, 48px);
-    padding-left: var(--gutter);
-    padding-right: var(--gutter);
+    padding-inline: var(--gutter);
   }
 
   .methodology-grid {
     grid-template-columns: 1fr;
     gap: 40px;
+    padding-inline: 0;
   }
 
   .step-card {
@@ -887,6 +933,7 @@ html {
     opacity: .18;
   }
 }
+
 /* ───────────── SOLUCIONES (tiles) ───────────── */
 .solutions {
   position: relative;
