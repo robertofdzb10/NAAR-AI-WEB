@@ -5,10 +5,10 @@ import iconPersonalizacion from "../assets/ICON_PERSONALIZACION.svg";
 
 function navigateToSection(targetIndex) {
   window.dispatchEvent(
-    new CustomEvent('naar-goToSection', {
-      detail: { targetIndex }
+    new CustomEvent("naar-goToSection", {
+      detail: { targetIndex },
     })
-  )
+  );
 }
 
 export default function About() {
@@ -20,7 +20,6 @@ export default function About() {
       className="about"
       aria-label="Quiénes somos"
     >
-      {/* Hero superior */}
       <div
         className="about-hero"
         style={{ backgroundImage: `url(${aboutUrl})` }}
@@ -38,7 +37,6 @@ export default function About() {
         </div>
       </div>
 
-      {/* Features */}
       <div className="about-features">
         <div className="about-container">
           <ul className="feature-grid">
@@ -96,26 +94,13 @@ export default function About() {
         </div>
       </div>
 
-      {/* Chevron hacia siguiente sección */}
       <button
         className="about-chevron"
         aria-label="Sigue leyendo"
-        onClick={() => navigateToSection(2)} // ir a Metodología (index 2)
+        onClick={() => navigateToSection(2)} // Metodología
       >
-        <svg
-          width="42"
-          height="42"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
           <path
             d="M8 11l4 4 4-4"
             stroke="currentColor"

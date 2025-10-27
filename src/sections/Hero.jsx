@@ -3,16 +3,16 @@ import heroUrl from "../assets/hero-bg.jpg";
 
 function navigateToSection(targetIndex) {
   window.dispatchEvent(
-    new CustomEvent('naar-goToSection', {
-      detail: { targetIndex }
+    new CustomEvent("naar-goToSection", {
+      detail: { targetIndex },
     })
-  )
+  );
 }
 
 export default function Hero() {
   const [ready, setReady] = useState(false);
 
-  // Precarga ligera de metodología
+  // ❗ opcional: si quieres, puedes borrar este efecto entero
   useEffect(() => {
     const el = document.querySelector("#metodologia");
     if (!el) return;
@@ -35,7 +35,6 @@ export default function Hero() {
       className="hero"
       aria-label="Sección principal"
     >
-      {/* Fondo vídeo */}
       <video
         className={`hero-bg ${ready ? "is-ready" : ""}`}
         autoPlay
@@ -51,7 +50,6 @@ export default function Hero() {
         <source src="/videos/hero-bg.mp4" type="video/mp4" />
       </video>
 
-      {/* Contenido */}
       <div className="hero-inner">
         <h1 className="hero-title">
           Soluciones Avanzadas de <br />
@@ -70,27 +68,14 @@ export default function Hero() {
         </a>
       </div>
 
-      {/* Chevron hacia abajo */}
       <button
         className="hero-chevron"
         aria-label="Desplazar hacia abajo"
         title="Desplazar hacia abajo"
-        onClick={() => navigateToSection(1)} // ir a About (index 1)
+        onClick={() => navigateToSection(1)} // About
       >
-        <svg
-          width="42"
-          height="42"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
           <path
             d="M8 11l4 4 4-4"
             stroke="currentColor"

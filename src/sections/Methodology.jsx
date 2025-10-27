@@ -1,11 +1,9 @@
-import { useRef } from "react";
-
 function navigateToSection(targetIndex) {
   window.dispatchEvent(
-    new CustomEvent('naar-goToSection', {
-      detail: { targetIndex }
+    new CustomEvent("naar-goToSection", {
+      detail: { targetIndex },
     })
-  )
+  );
 }
 
 const steps = [
@@ -48,8 +46,6 @@ const steps = [
 ];
 
 export default function Methodology() {
-  const cardsRef = useRef([]);
-
   return (
     <section
       id="metodologia"
@@ -66,16 +62,13 @@ export default function Methodology() {
         </header>
 
         <div className="methodology-grid">
-          {steps.map((s, i) => (
+          {steps.map((s) => (
             <article className="step" key={s.n}>
               <div className="step-num" aria-hidden="true">
                 {s.n}
               </div>
 
-              <div
-                className="step-card"
-                ref={(el) => (cardsRef.current[i] = el)}
-              >
+              <div className="step-card">
                 <h3 className="step-title">{s.title}</h3>
                 <p className="step-desc">{s.desc}</p>
                 <ul className="step-list">
@@ -92,22 +85,10 @@ export default function Methodology() {
       <button
         className="methodology-chevron"
         aria-label="Sigue leyendo"
-        onClick={() => navigateToSection(3)} // ir a Solutions (index 3)
+        onClick={() => navigateToSection(3)} // Solutions
       >
-        <svg
-          width="42"
-          height="42"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
           <path
             d="M8 11l4 4 4-4"
             stroke="currentColor"

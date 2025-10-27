@@ -4,10 +4,10 @@ import img3 from "../assets/sol-dev.jpg";
 
 function navigateToSection(targetIndex) {
   window.dispatchEvent(
-    new CustomEvent('naar-goToSection', {
-      detail: { targetIndex }
+    new CustomEvent("naar-goToSection", {
+      detail: { targetIndex },
     })
-  )
+  );
 }
 
 export default function Solutions() {
@@ -29,12 +29,10 @@ export default function Solutions() {
           tabIndex={0}
         >
           <div className="sol-overlay" aria-hidden="true" />
-
           <header className="sol-title-wrap">
             <h3 className="sol-kicker">Asistentes Virtuales</h3>
             <p className="sol-title">Inteligentes</p>
           </header>
-
           <div className="sol-info">
             <h4>Asistentes Virtuales Inteligentes</h4>
             <p>
@@ -56,12 +54,10 @@ export default function Solutions() {
           tabIndex={0}
         >
           <div className="sol-overlay" aria-hidden="true" />
-
           <header className="sol-title-wrap">
             <h3 className="sol-kicker">Imágenes y</h3>
             <p className="sol-title">Vídeos con IA</p>
           </header>
-
           <div className="sol-info">
             <h4>Imágenes y Vídeos con IA</h4>
             <p>
@@ -82,12 +78,10 @@ export default function Solutions() {
           tabIndex={0}
         >
           <div className="sol-overlay" aria-hidden="true" />
-
           <header className="sol-title-wrap">
             <h3 className="sol-kicker">Desarrollo de</h3>
             <p className="sol-title">Software</p>
           </header>
-
           <div className="sol-info">
             <h4>Desarrollo de Software</h4>
             <p>
@@ -107,22 +101,10 @@ export default function Solutions() {
       <button
         className="solutions-chevron chevron-btn chevron--dark"
         aria-label="Sigue leyendo"
-        onClick={() => navigateToSection(4)} // ir a Contact (index 4)
+        onClick={() => navigateToSection(4)} // Contact
       >
-        <svg
-          width="42"
-          height="42"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
           <path
             d="M8 11l4 4 4-4"
             stroke="currentColor"
