@@ -1342,9 +1342,15 @@ html {
   border: none;
   cursor: pointer;
   box-shadow: 0 10px 20px rgba(0, 0, 0, .18);
-  transition: transform .15s ease, filter .15s ease;
   z-index: 9999;
+
+  /* suave cuando sube/baja junto al footer */
+  transition:
+    bottom .25s cubic-bezier(.25,.8,.25,1),
+    transform .15s ease,
+    filter .15s ease;
 }
+
 .naar-chat-fab:hover {
   transform: translateY(-1px);
   filter: brightness(1.05);
@@ -1364,6 +1370,9 @@ html {
   overflow: hidden;
   z-index: 9999;
   border: 1px solid rgba(0, 0, 0, .06);
+
+  /* transición suave del desplazamiento vertical */
+  transition: bottom .25s cubic-bezier(.25,.8,.25,1);
 }
 
 .naar-chat-header {
@@ -1440,6 +1449,7 @@ html {
 .naar-right {
   justify-content: flex-end;
 }
+
 .naar-bubble {
   max-width: 78%;
   padding: 8px 10px;
@@ -1451,6 +1461,7 @@ html {
   white-space: pre-line;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Inter', Roboto, sans-serif;
 }
+
 .naar-bubble-bot {
   background: #ffffff;
   color: #111;
@@ -1467,6 +1478,63 @@ html {
   font-size: 12px;
   margin: 6px 2px;
 }
+
+/* === Modo expandido === */
+.naar-chat-window.expanded {
+  width: clamp(360px, 34vw, 440px);
+  height: clamp(480px, 60vh, 600px);
+  right: 22px;
+  bottom: 22px;
+  transition: all 0.25s cubic-bezier(.25,.8,.25,1);
+}
+
+
+/* Ícono de expandir / colapsar */
+.naar-expand-btn {
+  background: transparent;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px;
+  cursor: pointer;
+  min-width: 30px;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.naar-expand-btn:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+
+/* === Ajuste dinámico del chat cuando el footer es visible === */
+body.chat--lifted .naar-chat-fab,
+body.chat--lifted .naar-chat-window {
+  bottom: calc(var(--footer-h, 96px) + 20px);
+}
+
+/* En móvil el footer y el botón flotante ocupan más espacio,
+   así que levantamos más el chat */
+@media (max-width: 768px) {
+  body.chat--lifted .naar-chat-fab,
+  body.chat--lifted .naar-chat-window {
+    bottom: calc(var(--footer-h, 96px) + 72px);
+  }
+}
+
+@media (max-width: 768px) {
+  .naar-chat-window.expanded {
+    width: 90vw;
+    height: 70vh;
+    right: 5vw;
+    bottom: 6vh;
+  }
+}
+
+
 
 /* ===== Móvil: hero + features caben ENTEROS en un viewport ===== */
 @media (max-width: 640px) {
