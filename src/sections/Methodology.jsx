@@ -1,5 +1,12 @@
-// src/components/Methodology.jsx
 import { useRef } from "react";
+
+function navigateToSection(targetIndex) {
+  window.dispatchEvent(
+    new CustomEvent('naar-goToSection', {
+      detail: { targetIndex }
+    })
+  )
+}
 
 const steps = [
   {
@@ -43,26 +50,13 @@ const steps = [
 export default function Methodology() {
   const cardsRef = useRef([]);
 
-  const scrollNext = () => {
-    const el =
-      document.querySelector("#soluciones") ||
-      document.querySelector("#contacto") ||
-      document.querySelector("#metodologia")?.nextElementSibling;
-
-    if (!el) return;
-
-    const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-
-    el.scrollIntoView({
-      behavior: prefersReduced ? "auto" : "smooth",
-      block: "start",
-    });
-  };
-
   return (
-    <section id="metodologia" className="methodology">
+    <section
+      id="metodologia"
+      data-index="2"
+      data-bg="light"
+      className="methodology"
+    >
       <div className="methodology-inner">
         <header className="methodology-head">
           <h2 className="methodology-title">Nuestra Metodología</h2>
@@ -98,7 +92,7 @@ export default function Methodology() {
       <button
         className="methodology-chevron"
         aria-label="Sigue leyendo"
-        onClick={scrollNext}
+        onClick={() => navigateToSection(3)} // ir a Solutions (index 3)
       >
         <svg
           width="42"

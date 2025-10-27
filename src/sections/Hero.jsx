@@ -1,19 +1,25 @@
-// src/components/Hero.jsx
 import { useEffect, useState } from "react";
 import heroUrl from "../assets/hero-bg.jpg";
+
+function navigateToSection(targetIndex) {
+  window.dispatchEvent(
+    new CustomEvent('naar-goToSection', {
+      detail: { targetIndex }
+    })
+  )
+}
 
 export default function Hero() {
   const [ready, setReady] = useState(false);
 
-  // 🔹 Precarga la sección "Metodología" en cuanto el Hero esté montado
+  // Precarga ligera de metodología
   useEffect(() => {
     const el = document.querySelector("#metodologia");
     if (!el) return;
 
     el.style.willChange = "transform, opacity";
-    el.getBoundingClientRect(); // fuerza layout (precalienta render)
-    
-    // Limpieza después de 1s para liberar GPU
+    el.getBoundingClientRect();
+
     const t = setTimeout(() => {
       el.style.willChange = "";
     }, 1000);
@@ -21,25 +27,15 @@ export default function Hero() {
     return () => clearTimeout(t);
   }, []);
 
-  // 🔹 Scroll Hero → About
-  const scrollToSection = (e) => {
-    e.preventDefault();
-    const target = document.querySelector("#quienes");
-    if (!target) return;
-
-    const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-
-    target.scrollIntoView({
-      behavior: prefersReduced ? "auto" : "smooth",
-      block: "start",
-    });
-  };
-
   return (
-    <section id="hero" className="hero" aria-label="Sección principal">
-      {/* Fondo en video */}
+    <section
+      id="hero"
+      data-index="0"
+      data-bg="dark"
+      className="hero"
+      aria-label="Sección principal"
+    >
+      {/* Fondo vídeo */}
       <video
         className={`hero-bg ${ready ? "is-ready" : ""}`}
         autoPlay
@@ -55,7 +51,7 @@ export default function Hero() {
         <source src="/videos/hero-bg.mp4" type="video/mp4" />
       </video>
 
-      {/* Contenido principal */}
+      {/* Contenido */}
       <div className="hero-inner">
         <h1 className="hero-title">
           Soluciones Avanzadas de <br />
@@ -75,12 +71,11 @@ export default function Hero() {
       </div>
 
       {/* Chevron hacia abajo */}
-      <a
-        href="#quienes"
+      <button
         className="hero-chevron"
-        onClick={scrollToSection}
         aria-label="Desplazar hacia abajo"
         title="Desplazar hacia abajo"
+        onClick={() => navigateToSection(1)} // ir a About (index 1)
       >
         <svg
           width="42"
@@ -104,7 +99,7 @@ export default function Hero() {
             strokeLinejoin="round"
           />
         </svg>
-      </a>
+      </button>
     </section>
   );
 }

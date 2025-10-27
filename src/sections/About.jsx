@@ -3,40 +3,24 @@ import iconMaletin from "../assets/ICON_MALETIN.svg";
 import iconTecnologia from "../assets/ICON_TECNOLOGIA.svg";
 import iconPersonalizacion from "../assets/ICON_PERSONALIZACION.svg";
 
+function navigateToSection(targetIndex) {
+  window.dispatchEvent(
+    new CustomEvent('naar-goToSection', {
+      detail: { targetIndex }
+    })
+  )
+}
+
 export default function About() {
-  const scrollToNext = (e) => {
-    e.preventDefault();
-
-    const el = document.querySelector("#metodologia");
-    if (!el) return;
-
-    const prefersReduced =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-
-    // 1️⃣ Fuerza composición GPU anticipada de la siguiente sección
-    el.style.willChange = "transform, opacity";
-    el.offsetHeight; // fuerza layout temprano
-
-    // 2️⃣ Espera un frame para que se estabilice el pipeline
-    requestAnimationFrame(() => {
-      // 3️⃣ Scroll suave, ya con todo cacheado
-      el.scrollIntoView({
-        behavior: prefersReduced ? "auto" : "smooth",
-        block: "start",
-      });
-
-      // Limpieza del hint GPU tras un breve tiempo
-      setTimeout(() => {
-        el.style.willChange = "";
-      }, 500);
-    });
-  };
-
-
   return (
-    <section id="quienes" className="about" aria-label="Quiénes somos">
-      {/* ───── Hero superior ───── */}
+    <section
+      id="quienes"
+      data-index="1"
+      data-bg="dark"
+      className="about"
+      aria-label="Quiénes somos"
+    >
+      {/* Hero superior */}
       <div
         className="about-hero"
         style={{ backgroundImage: `url(${aboutUrl})` }}
@@ -54,7 +38,7 @@ export default function About() {
         </div>
       </div>
 
-      {/* ───── Features (3 columnas / 3 filas en móvil) ───── */}
+      {/* Features */}
       <div className="about-features">
         <div className="about-container">
           <ul className="feature-grid">
@@ -112,12 +96,11 @@ export default function About() {
         </div>
       </div>
 
-      {/* ───── Chevron hacia siguiente sección ───── */}
-      <a
-        href="#metodologia"
+      {/* Chevron hacia siguiente sección */}
+      <button
         className="about-chevron"
-        onClick={scrollToNext}
         aria-label="Sigue leyendo"
+        onClick={() => navigateToSection(2)} // ir a Metodología (index 2)
       >
         <svg
           width="42"
@@ -141,7 +124,7 @@ export default function About() {
             strokeLinejoin="round"
           />
         </svg>
-      </a>
+      </button>
     </section>
   );
 }

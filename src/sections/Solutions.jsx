@@ -1,18 +1,28 @@
-import img1 from "../assets/sol-ava.jpg";   // Asistentes Virtuales
-import img2 from "../assets/sol-media.jpg"; // Imágenes / Vídeos IA
-import img3 from "../assets/sol-dev.jpg";   // Desarrollo Software
+import img1 from "../assets/sol-ava.jpg";
+import img2 from "../assets/sol-media.jpg";
+import img3 from "../assets/sol-dev.jpg";
+
+function navigateToSection(targetIndex) {
+  window.dispatchEvent(
+    new CustomEvent('naar-goToSection', {
+      detail: { targetIndex }
+    })
+  )
+}
 
 export default function Solutions() {
   return (
-    <section id="soluciones" className="solutions">
-      {/* Cabecera */}
+    <section
+      id="soluciones"
+      data-index="3"
+      data-bg="light"
+      className="solutions"
+    >
       <div className="solutions-head">
         <h2 className="solutions-title">Soluciones</h2>
       </div>
 
-      {/* Grid */}
       <div className="solutions-grid">
-        {/* CARD 1 */}
         <article
           className="sol-card"
           style={{ backgroundImage: `url(${img1})` }}
@@ -40,7 +50,6 @@ export default function Solutions() {
           </div>
         </article>
 
-        {/* CARD 2 */}
         <article
           className="sol-card"
           style={{ backgroundImage: `url(${img2})` }}
@@ -67,7 +76,6 @@ export default function Solutions() {
           </div>
         </article>
 
-        {/* CARD 3 */}
         <article
           className="sol-card"
           style={{ backgroundImage: `url(${img3})` }}
@@ -96,22 +104,10 @@ export default function Solutions() {
         </article>
       </div>
 
-      {/* Chevron al final */}
       <button
         className="solutions-chevron chevron-btn chevron--dark"
         aria-label="Sigue leyendo"
-        onClick={() => {
-          const el =
-            document.querySelector("#contacto") ||
-            document.querySelector("#soluciones")?.nextElementSibling;
-
-          if (el) {
-            el.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-          }
-        }}
+        onClick={() => navigateToSection(4)} // ir a Contact (index 4)
       >
         <svg
           width="42"

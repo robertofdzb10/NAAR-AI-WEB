@@ -44,7 +44,13 @@ export default function Contact() {
   }
 
   return (
-    <section id="contacto" className="contact" aria-label="Contacto">
+    <section
+      id="contacto"
+      className="contact"
+      data-index="4"
+      data-bg="light"
+      aria-label="Contacto"
+    >
       <div className="contact-inner">
         {/* Izquierda */}
         <div className="contact-left">
