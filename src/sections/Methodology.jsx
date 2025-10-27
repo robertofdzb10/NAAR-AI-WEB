@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+// src/components/Methodology.jsx
+import { useRef } from "react";
 
 const steps = [
   {
@@ -41,40 +42,6 @@ const steps = [
 
 export default function Methodology() {
   const cardsRef = useRef([]);
-
-  useEffect(() => {
-    const els = cardsRef.current.filter(Boolean);
-    if (!els.length) return;
-
-    const w = typeof window !== "undefined" ? window : null;
-
-    // Si venimos de un scroll programado → ya visibles, sin animar
-    if (w && w.__naarPrefillMethodology) {
-      els.forEach((el) => el.classList.add("is-visible"));
-      w.__naarPrefillMethodology = false;
-      return;
-    }
-
-    // Modo normal (scroll manual): animación con IntersectionObserver
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("is-visible");
-            obs.unobserve(e.target);
-          }
-        });
-      },
-      {
-        // ANTES: threshold: 0.18
-        // AHORA: subimos a 0.6 para que entren más escalonadas
-        threshold: 0.6,
-      }
-    );
-
-    els.forEach((el) => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
 
   const scrollNext = () => {
     const el =

@@ -10,20 +10,29 @@ export default function About() {
     const el = document.querySelector("#metodologia");
     if (!el) return;
 
-    // Marca: vamos a metodología de forma programada
-    if (typeof window !== "undefined") {
-      window.__naarPrefillMethodology = true;
-    }
-
     const prefersReduced =
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
-    el.scrollIntoView({
-      behavior: prefersReduced ? "auto" : "smooth",
-      block: "start",
+    // 1️⃣ Fuerza composición GPU anticipada de la siguiente sección
+    el.style.willChange = "transform, opacity";
+    el.offsetHeight; // fuerza layout temprano
+
+    // 2️⃣ Espera un frame para que se estabilice el pipeline
+    requestAnimationFrame(() => {
+      // 3️⃣ Scroll suave, ya con todo cacheado
+      el.scrollIntoView({
+        behavior: prefersReduced ? "auto" : "smooth",
+        block: "start",
+      });
+
+      // Limpieza del hint GPU tras un breve tiempo
+      setTimeout(() => {
+        el.style.willChange = "";
+      }, 500);
     });
   };
+
 
   return (
     <section id="quienes" className="about" aria-label="Quiénes somos">
