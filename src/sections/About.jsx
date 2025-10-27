@@ -6,10 +6,17 @@ import iconPersonalizacion from "../assets/ICON_PERSONALIZACION.svg";
 export default function About() {
   const scrollToNext = (e) => {
     e.preventDefault();
+
     const el = document.querySelector("#metodologia");
     if (!el) return;
 
+    // Marca: vamos a metodología de forma programada
+    if (typeof window !== "undefined") {
+      window.__naarPrefillMethodology = true;
+    }
+
     const prefersReduced =
+      typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     el.scrollIntoView({
@@ -103,8 +110,20 @@ export default function About() {
         onClick={scrollToNext}
         aria-label="Sigue leyendo"
       >
-        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+        <svg
+          width="42"
+          height="42"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
           <path
             d="M8 11l4 4 4-4"
             stroke="currentColor"

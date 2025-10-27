@@ -46,15 +46,30 @@ export default function Methodology() {
     const els = cardsRef.current.filter(Boolean);
     if (!els.length) return;
 
+    const w = typeof window !== "undefined" ? window : null;
+
+    // Si venimos de un scroll programado → ya visibles, sin animar
+    if (w && w.__naarPrefillMethodology) {
+      els.forEach((el) => el.classList.add("is-visible"));
+      w.__naarPrefillMethodology = false;
+      return;
+    }
+
+    // Modo normal (scroll manual): animación con IntersectionObserver
     const obs = new IntersectionObserver(
-      (entries) =>
+      (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             e.target.classList.add("is-visible");
             obs.unobserve(e.target);
           }
-        }),
-      { threshold: 0.18 }
+        });
+      },
+      {
+        // ANTES: threshold: 0.18
+        // AHORA: subimos a 0.6 para que entren más escalonadas
+        threshold: 0.6,
+      }
     );
 
     els.forEach((el) => obs.observe(el));
@@ -70,6 +85,7 @@ export default function Methodology() {
     if (!el) return;
 
     const prefersReduced =
+      typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     el.scrollIntoView({
@@ -91,7 +107,9 @@ export default function Methodology() {
         <div className="methodology-grid">
           {steps.map((s, i) => (
             <article className="step" key={s.n}>
-              <div className="step-num" aria-hidden="true">{s.n}</div>
+              <div className="step-num" aria-hidden="true">
+                {s.n}
+              </div>
 
               <div
                 className="step-card"
@@ -115,8 +133,20 @@ export default function Methodology() {
         aria-label="Sigue leyendo"
         onClick={scrollNext}
       >
-        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+        <svg
+          width="42"
+          height="42"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
           <path
             d="M8 11l4 4 4-4"
             stroke="currentColor"
