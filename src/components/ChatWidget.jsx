@@ -1,22 +1,32 @@
 import { useState, useEffect } from "react";
-import { FiMessageSquare, FiSend, FiX, FiMaximize2, FiMinimize2 } from "react-icons/fi";
+import {
+  FiMessageSquare,
+  FiSend,
+  FiX,
+  FiMaximize2,
+  FiMinimize2,
+} from "react-icons/fi";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
-  const [expanded, setExpanded] = useState(false); // ⬅️ pequeño por defecto
+  const [expanded, setExpanded] = useState(false); // ventana pequeña por defecto
   const [messages, setMessages] = useState([
-    { from: "bot", text: "¡Hola! Soy el asistente de NAAR, ¿en qué puedo ayudarte?" },
+    {
+      from: "bot",
+      text: "¡Hola! Soy el asistente de NAAR, ¿en qué puedo ayudarte?",
+    },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // --- Detectar footer visible ---
+  // --- Detectar si el footer está visible para subir el chat y que no lo tape ---
   useEffect(() => {
     const footerEl = document.querySelector("footer");
     if (!footerEl) return;
     let timer = null;
+
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries[0].isIntersecting;
@@ -27,7 +37,9 @@ export default function ChatWidget() {
       },
       { root: null, threshold: 0.1 }
     );
+
     observer.observe(footerEl);
+
     return () => {
       if (timer) clearTimeout(timer);
       observer.disconnect();
@@ -51,8 +63,12 @@ export default function ChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg.text }),
       });
+
       const data = await res.json();
-      const replyText = data?.reply || "Lo siento, ahora mismo no pude procesar esa pregunta.";
+      const replyText =
+        data?.reply ||
+        "Lo siento, ahora mismo no pude procesar esa pregunta.";
+
       setMessages((prev) => [...prev, { from: "bot", text: replyText }]);
     } catch {
       setMessages((prev) => [
@@ -66,73 +82,97 @@ export default function ChatWidget() {
 
   return (
     <>
-      {/* Botón flotante cerrado */}
+      {/* Botón flotante cuando está cerrado */}
       {!open && (
-        <button className="naar-chat-fab" onClick={() => setOpen(true)} aria-label="Abrir chat">
+        <button
+          className="naar-chat-fab"
+          onClick={() => setOpen(true)}
+          aria-label="Abrir chat"
+        >
           <FiMessageSquare size={22} />
         </button>
       )}
 
-      {/* Ventana de chat */}
+      {/* Ventana del chat */}
       {open && (
         <div className={`naar-chat-window ${expanded ? "expanded" : ""}`}>
+          {/* CABECERA */}
           <div className="naar-chat-header">
-            <span>Asistente NAAR</span>
-            <div style={{ display: "flex", gap: "6px" }}>
-              {/* 🔼 Mostrar botón de ampliar cuando está reducido */}
+            <div className="naar-chat-header-left">
+              <span
+                className="naar-chat-status-dot"
+                aria-hidden="true"
+              ></span>
+
+              <div className="naar-chat-header-text">
+                <div className="naar-chat-header-line1">NAAR Assistant</div>
+                <div className="naar-chat-header-line2">
+                  Disponible ahora
+                </div>
+              </div>
+            </div>
+
+            <div className="naar-chat-header-right">
+              {/* Botón ampliar/reducir tamaño */}
               {!expanded && (
                 <button
                   onClick={() => setExpanded(true)}
-                  className="naar-expand-btn"
+                  className="naar-header-iconbtn"
                   aria-label="Ampliar ventana"
                 >
-                  <FiMaximize2 size={16} />
+                  <FiMaximize2 size={15} />
                 </button>
               )}
 
-              {/* 🔽 Mostrar botón de reducir cuando está expandido */}
               {expanded && (
                 <button
                   onClick={() => setExpanded(false)}
-                  className="naar-expand-btn"
+                  className="naar-header-iconbtn"
                   aria-label="Reducir ventana"
                 >
-                  <FiMinimize2 size={16} />
+                  <FiMinimize2 size={15} />
                 </button>
               )}
 
-              {/* Botón de cerrar */}
+              {/* Botón cerrar */}
               <button
                 onClick={() => {
                   setOpen(false);
-                  setExpanded(false); // ✅ vuelve a pequeño al cerrar
+                  setExpanded(false); // reset al cerrar
                 }}
-                className="naar-icon-btn"
+                className="naar-header-iconbtn"
                 aria-label="Cerrar chat"
               >
-                <FiX size={18} />
+                <FiX size={16} />
               </button>
             </div>
           </div>
 
+          {/* Mensajes */}
           <div className="naar-chat-body">
             {messages.map((m, i) => (
               <div
                 key={i}
-                className={`naar-msg ${m.from === "user" ? "naar-right" : "naar-left"}`}
+                className={`naar-msg ${
+                  m.from === "user" ? "naar-right" : "naar-left"
+                }`}
               >
                 <div
                   className={`naar-bubble ${
-                    m.from === "user" ? "naar-bubble-user" : "naar-bubble-bot"
+                    m.from === "user"
+                      ? "naar-bubble-user"
+                      : "naar-bubble-bot"
                   }`}
                 >
                   {m.text}
                 </div>
               </div>
             ))}
+
             {loading && <p className="naar-typing">Escribiendo...</p>}
           </div>
 
+          {/* Zona de input */}
           <form onSubmit={sendMessage} className="naar-chat-input">
             <input
               type="text"

@@ -1330,7 +1330,7 @@ html {
   .contact-btn { align-self: center; }
 }
 
-/* === Chat widget flotante NAAR === */
+/* === FAB flotante (botón redondo cuando está cerrado) === */
 .naar-chat-fab {
   position: fixed;
   right: 20px;
@@ -1348,7 +1348,6 @@ html {
   box-shadow: 0 10px 20px rgba(0, 0, 0, .18);
   z-index: 9999;
 
-  /* suave cuando sube/baja junto al footer */
   transition:
     bottom .25s cubic-bezier(.25,.8,.25,1),
     transform .15s ease,
@@ -1360,6 +1359,7 @@ html {
   filter: brightness(1.05);
 }
 
+/* === Ventana general del chat === */
 .naar-chat-window {
   position: fixed;
   right: 20px;
@@ -1368,29 +1368,141 @@ html {
   height: 420px;
   background: #fff;
   border-radius: 14px;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, .22);
+  border: 1px solid rgba(0, 0, 0, .06);
+  box-shadow:
+    0 28px 60px rgba(0, 0, 0, .45),
+    0 2px 4px rgba(0, 0, 0, .4),
+    0 0 20px rgba(0, 219, 198, 0.2); /* glow turquesa sutil */
   display: flex;
   flex-direction: column;
   overflow: hidden;
   z-index: 9999;
-  border: 1px solid rgba(0, 0, 0, .06);
 
-  /* transición suave del desplazamiento vertical */
+  /* transición suave al levantarse con el footer */
   transition: bottom .25s cubic-bezier(.25,.8,.25,1);
 }
 
-.naar-chat-header {
-  background: #091b35;
-  color: #fff;
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 600;
-  font-family: var(--font-heading, system-ui, sans-serif);
-  font-size: 14px;
+/* Modo expandido */
+.naar-chat-window.expanded {
+  width: clamp(360px, 34vw, 440px);
+  height: clamp(480px, 60vh, 600px);
+  right: 22px;
+  bottom: 22px;
+  transition: all 0.25s cubic-bezier(.25,.8,.25,1);
 }
 
+/* === CABECERA nueva === */
+.naar-chat-header {
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(0, 219, 198, 0.08) 0%,
+      rgba(0, 0, 0, 0) 60%
+    ),
+    linear-gradient(
+      to right,
+      rgba(15, 15, 16, 0.94) 0%,
+      rgba(20, 20, 22, 0.9) 60%,
+      rgba(20, 20, 22, 0.88) 100%
+    );
+  border-bottom: 1px solid rgba(0, 219, 198, 0.22);
+
+  color: #fff;
+  padding: 12px 12px 10px;
+  min-height: 60px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  font-family: var(--font-heading, system-ui, sans-serif);
+  line-height: 1.2;
+}
+
+.naar-chat-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.naar-chat-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  margin-top: 4px;
+  background-color: #00ff84;
+  box-shadow:
+    0 0 6px #00ff84,
+    0 0 12px rgba(0, 255, 132, 0.6);
+  animation: naarDotPulse 2s infinite ease-in-out;
+}
+
+@keyframes naarDotPulse {
+  0%,100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.7;
+  }
+}
+
+.naar-chat-header-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.naar-chat-header-line1 {
+  color: #00dbc6;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 8px rgba(0, 219, 198, 0.5);
+}
+
+.naar-chat-header-line2 {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0;
+  margin-top: 2px;
+}
+
+.naar-chat-header-right {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* Botones de cabecera (expandir / cerrar) */
+.naar-header-iconbtn {
+  background: transparent;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px;
+  cursor: pointer;
+  min-width: 28px;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  opacity: 0.7;
+  transition: all 0.18s ease;
+}
+
+.naar-header-iconbtn:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  opacity: 1;
+  color: #00dbc6;
+  box-shadow: 0 0 8px rgba(0,219,198,.6);
+}
+
+/* === Cuerpo de mensajes === */
 .naar-chat-body {
   flex: 1;
   padding: 10px;
@@ -1399,48 +1511,6 @@ html {
   font-size: 14px;
   line-height: 1.4;
   color: #111;
-}
-
-.naar-chat-input {
-  display: flex;
-  gap: 8px;
-  padding: 8px;
-  border-top: 1px solid rgba(0, 0, 0, .06);
-  background: #fff;
-}
-
-.naar-chat-input input {
-  flex: 1;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 8px 10px;
-  font-size: 14px;
-  line-height: 1.4;
-  outline: none;
-}
-.naar-chat-input input:focus {
-  border-color: #00dbc6;
-  box-shadow: 0 0 0 2px rgba(0,219,198,.2);
-}
-
-.naar-icon-btn {
-  background: #00dbc6;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px;
-  cursor: pointer;
-  min-width: 36px;
-  min-height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 16px rgba(0,0,0,.12);
-}
-.naar-icon-btn:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-  box-shadow: none;
 }
 
 .naar-msg {
@@ -1483,45 +1553,57 @@ html {
   margin: 6px 2px;
 }
 
-/* === Modo expandido === */
-.naar-chat-window.expanded {
-  width: clamp(360px, 34vw, 440px);
-  height: clamp(480px, 60vh, 600px);
-  right: 22px;
-  bottom: 22px;
-  transition: all 0.25s cubic-bezier(.25,.8,.25,1);
+/* === Zona de input === */
+.naar-chat-input {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-top: 1px solid rgba(0, 0, 0, .06);
+  background: #fff;
 }
 
+.naar-chat-input input {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  outline: none;
+}
+.naar-chat-input input:focus {
+  border-color: #00dbc6;
+  box-shadow: 0 0 0 2px rgba(0,219,198,.2);
+}
 
-/* Ícono de expandir / colapsar */
-.naar-expand-btn {
-  background: transparent;
+/* Botón enviar (dentro de input area) */
+.naar-icon-btn {
+  background: #00dbc6;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 4px;
+  border-radius: 8px;
+  padding: 8px;
   cursor: pointer;
-  min-width: 30px;
-  min-height: 30px;
+  min-width: 36px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 8px 16px rgba(0,0,0,.12);
+}
+.naar-icon-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
-.naar-expand-btn:hover {
-  background-color: rgba(255, 255, 255, 0.12);
-}
-
-
-/* === Ajuste dinámico del chat cuando el footer es visible === */
+/* === Levantar el chat cuando el footer está visible (para que no tape) === */
 body.chat--lifted .naar-chat-fab,
 body.chat--lifted .naar-chat-window {
   bottom: calc(var(--footer-h, 96px) + 20px);
 }
 
-/* En móvil el footer y el botón flotante ocupan más espacio,
-   así que levantamos más el chat */
+/* En móvil hay más footer / teclado, levanta aún más */
 @media (max-width: 768px) {
   body.chat--lifted .naar-chat-fab,
   body.chat--lifted .naar-chat-window {
@@ -1529,6 +1611,7 @@ body.chat--lifted .naar-chat-window {
   }
 }
 
+/* Responsivo en modo expandido (mobile/tablet) */
 @media (max-width: 768px) {
   .naar-chat-window.expanded {
     width: 90vw;
@@ -1537,6 +1620,7 @@ body.chat--lifted .naar-chat-window {
     bottom: 6vh;
   }
 }
+
 
 /* ────────────────────────────────
    SCROLL INDICATOR LATERAL
